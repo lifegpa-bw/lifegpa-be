@@ -1,7 +1,3 @@
-# lifegpa-backend
-
-What the response data will look like:
-
     [
         {
             dailytrackerid: 1,
