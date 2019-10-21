@@ -47,6 +47,19 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<Useremail> useremails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    private List<DailyTracker> dailtrackers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    private List<Habit> habits = new ArrayList<>();
+
+
     public User()
     {
     }
