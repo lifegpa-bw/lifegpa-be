@@ -1,6 +1,5 @@
 package com.lambdaschool.lifegpa.models;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lambdaschool.lifegpa.logging.Loggable;
 
