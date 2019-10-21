@@ -2,12 +2,18 @@ package com.lambdaschool.lifegpa.models;
 
 import com.lambdaschool.lifegpa.logging.Loggable;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+//@Entity
 @Loggable
-public class UserMinimum
-{
+//@Table(name = "usermins")
+public class UserMinimum {
     private String username;
     private String password;
-    private String primaryemail;
+    private String email;
+
+
 
     public String getUsername()
     {
@@ -29,13 +35,13 @@ public class UserMinimum
         this.password = password;
     }
 
-    public String getPrimaryemail()
+    public String getEmail()
     {
-        return primaryemail;
+        return email;
     }
 
-    public void setPrimaryemail(String primaryemail)
+    public void setEmail(String Email)
     {
-        this.primaryemail = primaryemail;
+        this.email = email;
     }
 }

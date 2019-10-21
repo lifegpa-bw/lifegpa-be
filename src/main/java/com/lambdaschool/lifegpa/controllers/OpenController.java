@@ -55,30 +55,31 @@ public class OpenController
                                                 boolean getaccess,
                                         @Valid
                                         @RequestBody
-                                                UserMinimum newminuser) throws URISyntaxException
+                                                User newminuser) throws URISyntaxException
     {
         logger.trace(httpServletRequest.getMethod()
                                        .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
-
+        System.out.println(newminuser.getUsername());
         // Create the user
         User newuser = new User();
 
         newuser.setUsername(newminuser.getUsername());
         newuser.setPassword(newminuser.getPassword());
-        newuser.setPrimaryemail(newminuser.getPrimaryemail());
+        newuser.setEmail(newminuser.getEmail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser,
-                                   roleService.findByName("user")));
+        newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
         newuser.setUserroles(newRoles);
-
+        System.out.println("1");
         newuser = userService.save(newuser);
-
+        System.out.println("2");
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
                                                     .buildAndExpand(newuser.getUserid())
                                                     .toUri();
+        System.out.println("3");
+
         responseHeaders.setLocation(newUserURI);
 
         String theToken = "";
@@ -90,12 +91,22 @@ public class OpenController
 
             List<MediaType> acceptableMediaTypes = new ArrayList<>();
             acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+            System.out.println("4");
 
             HttpHeaders headers = new HttpHeaders();
+            System.out.println("11");
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            System.out.println("12");
+
             headers.setAccept(acceptableMediaTypes);
-            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
-                                 System.getenv("OAUTHCLIENTSECRET"));
+            System.out.println("13");
+
+            // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
+//            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+//                                 System.getenv("OAUTHCLIENTSECRET"));
+            headers.setBasicAuth("lambda-client", "lambda-secret");
+
+            System.out.println("5");
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("grant_type",
@@ -109,6 +120,7 @@ public class OpenController
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
                                                                                  headers);
+            System.out.println("6");
 
             theToken = restTemplate.postForObject(requestURI,
                                                   request,
