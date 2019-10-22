@@ -1,11 +1,8 @@
 package com.lambdaschool.lifegpa.services;
 
-import com.lambdaschool.lifegpa.exceptions.ResourceFoundException;
 import com.lambdaschool.lifegpa.exceptions.ResourceNotFoundException;
 import com.lambdaschool.lifegpa.logging.Loggable;
 import com.lambdaschool.lifegpa.models.Habit;
-import com.lambdaschool.lifegpa.models.User;
-import com.lambdaschool.lifegpa.models.Useremail;
 import com.lambdaschool.lifegpa.repository.HabitRepository;
 import com.lambdaschool.lifegpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +35,27 @@ public class HabitServiceImpl implements HabitService {
 
     @Override
     public Habit findHabitById(long id) {
-        return null;
+        return habitrepos.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Habit id " + id + " not found!"));
     }
 
     @Override
     public void delete(long id) {
-
+        habitrepos.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Habit id " + id + " not found!"));
+        habitrepos.deleteById(id);
     }
 
     @Override
     public Habit save(Habit habit) {
-        Habit newHabit =
+        Habit newHabit = new Habit();
+            newHabit.setDescription(habit.getDescription());
+            newHabit.setScore(habit.getScore());
+            newHabit.setGood_boolean(habit.isGood_boolean());
+            newHabit.setUser(habit.getUser());
+
+            return habitrepos.save(newHabit);
+
     }
 
     // User newUser = new User();

@@ -44,7 +44,7 @@ public class OpenController
     // {
     //     "username" : "Mojo",
     //     "password" : "corgie",
-    //     "primaryemail" : "home@local.house"
+    //     "email" : "home@local.house"
     // }
 
     @PostMapping(value = "/createnewuser",
@@ -68,7 +68,7 @@ public class OpenController
         newuser.setEmail(newminuser.getEmail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
+        newRoles.add(new UserRoles(newuser, roleService.findByName("admin")));
         newuser.setUserroles(newRoles);
         System.out.println("1");
         newuser = userService.save(newuser);
@@ -102,9 +102,9 @@ public class OpenController
             System.out.println("13");
 
             // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
-//            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
-//                                 System.getenv("OAUTHCLIENTSECRET"));
-            headers.setBasicAuth("lambda-client", "lambda-secret");
+            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+                                 System.getenv("OAUTHCLIENTSECRET"));
+//            headers.setBasicAuth("lambda-client", "lambda-secret");
 
             System.out.println("5");
 

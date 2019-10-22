@@ -17,6 +17,5 @@ public interface HabitService {
 
     Habit save(Habit habit);
 
-
     Habit update(Habit habit, long id);
 }
