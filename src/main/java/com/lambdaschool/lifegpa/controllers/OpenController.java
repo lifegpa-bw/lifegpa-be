@@ -51,7 +51,7 @@ public class OpenController
                  consumes = {"application/json"},
                  produces = {"application/json"})
     public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest,
-                                        @RequestParam(defaultValue = "true")
+                                        @RequestParam(defaultValue = "false")
                                                 boolean getaccess,
                                         @Valid
                                         @RequestBody
@@ -61,77 +61,80 @@ public class OpenController
                                        .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
         System.out.println(newminuser.getUsername());
         // Create the user
-        User newuser = new User();
 
-        newuser.setUsername(newminuser.getUsername());
-        newuser.setPassword(newminuser.getPassword());
-        newuser.setEmail(newminuser.getEmail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser, roleService.findByName("admin")));
-        newuser.setUserroles(newRoles);
-        System.out.println("1");
+        newRoles.add(new UserRoles(new User(), roleService.findByName("admin")));
+        User newuser = new User(newminuser.getUsername(), newminuser.getPassword(), newminuser.getEmail(), newRoles);
+
+//        newuser.setUsername(newminuser.getUsername());
+//        newuser.setPassword(newminuser.getPassword());
+//        newuser.setEmail(newminuser.getEmail());
+//        newuser.setUserroles(newRoles);
+//        System.out.println(newminuser.getPassword());
+//        newuser.getPassword();
         newuser = userService.save(newuser);
         System.out.println("2");
         // set the location header for the newly created resource - to another controller!
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
-                                                    .buildAndExpand(newuser.getUserid())
-                                                    .toUri();
-        System.out.println("3");
-
-        responseHeaders.setLocation(newUserURI);
-
-        String theToken = "";
-        if (getaccess)
-        {
-            // return the access token
-            RestTemplate restTemplate = new RestTemplate();
-            String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
-
-            List<MediaType> acceptableMediaTypes = new ArrayList<>();
-            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-            System.out.println("4");
-
-            HttpHeaders headers = new HttpHeaders();
-            System.out.println("11");
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            System.out.println("12");
-
-            headers.setAccept(acceptableMediaTypes);
-            System.out.println("13");
-
-            // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
-            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
-                                 System.getenv("OAUTHCLIENTSECRET"));
-//            headers.setBasicAuth("lambda-client", "lambda-secret");
-
-            System.out.println("5");
-
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("grant_type",
-                    "password");
-            map.add("scope",
-                    "read write trust");
-            map.add("username",
-                    newminuser.getUsername());
-            map.add("password",
-                    newminuser.getPassword());
-
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
-                                                                                 headers);
-            System.out.println("6");
-
-            theToken = restTemplate.postForObject(requestURI,
-                                                  request,
-                                                  String.class);
-        } else
-        {
-            // nothing;
-        }
-        return new ResponseEntity<>(theToken,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+//                                                    .buildAndExpand(newuser.getUserid())
+//                                                    .toUri();
+//        System.out.println("3");
+//
+//        responseHeaders.setLocation(newUserURI);
+//
+//        String theToken = "";
+//        if (getaccess)
+//        {
+//            // return the access token
+//            RestTemplate restTemplate = new RestTemplate();
+//            String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+//
+//            List<MediaType> acceptableMediaTypes = new ArrayList<>();
+//            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+//            System.out.println("4");
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            System.out.println("11");
+//            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//            System.out.println("12");
+//
+//            headers.setAccept(acceptableMediaTypes);
+//            System.out.println("13");
+//
+//            // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
+//            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+//                                 System.getenv("OAUTHCLIENTSECRET"));
+////            headers.setBasicAuth("lambda-client", "lambda-secret");
+//
+//            System.out.println("5");
+//
+//            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+//            map.add("grant_type",
+//                    "password");
+//            map.add("scope",
+//                    "read write trust");
+//            map.add("username",
+//                    newminuser.getUsername());
+//            map.add("password",
+//                    newminuser.getPassword());
+//
+//            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
+//                                                                                 headers);
+//            System.out.println("6");
+//
+//            theToken = restTemplate.postForObject(requestURI,
+//                                                  request,
+//                                                  String.class);
+//        } else
+//        {
+//            // nothing;
+//        }
+        return new ResponseEntity<>(
+//                theToken,
+//                responseHeaders,
+                HttpStatus.CREATED);
     }
 
     @ApiIgnore
