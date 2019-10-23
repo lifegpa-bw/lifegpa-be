@@ -14,8 +14,7 @@ import java.util.List;
 
 @Loggable
 @Service(value = "useremailService")
-public class UseremailServiceImpl implements UseremailService
-{
+public class UseremailServiceImpl implements UseremailService {
     @Autowired
     private UseremailRepository useremailrepos;
 
@@ -53,11 +52,9 @@ public class UseremailServiceImpl implements UseremailService
 
 
     @Override
-    public void delete(long id,
-                       boolean isAdmin)
+    public void delete(long id, boolean isAdmin)
     {
-        if (useremailrepos.findById(id)
-                          .isPresent())
+        if (useremailrepos.findById(id).isPresent())
         {
             Authentication authentication = SecurityContextHolder.getContext()
                                                                  .getAuthentication();

@@ -1,7 +1,10 @@
 package com.lambdaschool.lifegpa.controllers;
 
 import com.lambdaschool.lifegpa.logging.Loggable;
+import com.lambdaschool.lifegpa.models.Role;
 import com.lambdaschool.lifegpa.models.User;
+import com.lambdaschool.lifegpa.models.UserRoles;
+import com.lambdaschool.lifegpa.services.RoleService;
 import com.lambdaschool.lifegpa.services.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Loggable
@@ -65,7 +69,7 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    // http://localhost:2019/users/users/all
+//    // http://localhost:2019/users/users/all
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/users/all",
             produces = {"application/json"})
@@ -79,7 +83,7 @@ public class UserController {
     }
 
 
-    // http://localhost:2019/users/user/7
+//    // http://localhost:2019/users/user/7
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/{userId}",
             produces = {"application/json"})
@@ -93,7 +97,7 @@ public class UserController {
         return new ResponseEntity<>(u,
                 HttpStatus.OK);
     }
-
+//
     // http://localhost:2019/users/user/name/cinnamon
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/{userName}",
@@ -109,7 +113,7 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    // http://localhost:2019/users/user/name/like/da?sort=username
+//    // http://localhost:2019/users/user/name/like/da?sort=username
     @ApiOperation(value = "returns all Users with names containing a given string",
             response = User.class,
             responseContainer = "List")
@@ -124,7 +128,7 @@ public class UserController {
             dataType = "string",
             paramType = "query",
             value = "Sorting criteria in the format: property(,asc|desc). " + "Default sort order is ascending. " + "Multiple sort criteria are supported.")})
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/like/{userName}",
             produces = {"application/json"})
     public ResponseEntity<?> getUserLikeName(HttpServletRequest request,
@@ -142,12 +146,13 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-    // http://localhost:2019/users/getusername
+//    // http://localhost:2019/users/getusername
     @GetMapping(value = "/getusername",
             produces = {"application/json"})
     @ResponseBody
-    public ResponseEntity<?> getCurrentUserName(HttpServletRequest request,
-                                                Authentication authentication) {
+    public ResponseEntity<?> getCurrentUserName(HttpServletRequest request
+            ,Authentication authentication
+    ) {
         logger.trace(request.getMethod()
                 .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
@@ -158,8 +163,9 @@ public class UserController {
     // http://localhost:2019/users/getuserinfo
     @GetMapping(value = "/getuserinfo",
             produces = {"application/json"})
-    public ResponseEntity<?> getCurrentUserInfo(HttpServletRequest request,
-                                                Authentication authentication) {
+    public ResponseEntity<?> getCurrentUserInfo(HttpServletRequest request
+            ,Authentication authentication
+    ) {
         logger.trace(request.getMethod()
                 .toUpperCase() + " " + request.getRequestURI() + " accessed");
 
@@ -185,7 +191,10 @@ public class UserController {
     //            }
     //        ]
     //        }
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+
+    @Autowired
+    RoleService roleService;
+
     @PostMapping(value = "/user",
             consumes = {"application/json"},
             produces = {"application/json"})
@@ -195,6 +204,11 @@ public class UserController {
                                                 User newuser) throws URISyntaxException {
         logger.trace(request.getMethod()
                 .toUpperCase() + " " + request.getRequestURI() + " accessed");
+         Role role = roleService.findByName("admin");
+         ArrayList<UserRoles> newRoles = new ArrayList<>();
+         newRoles.add(new UserRoles(newuser,
+                 role));
+         newuser.setUserroles(newRoles);
 
         newuser = userService.save(newuser);
 
@@ -245,7 +259,7 @@ public class UserController {
     }
 
 
-    // http://localhost:2019/users/user/14
+//    // http://localhost:2019/users/user/14
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUserById(HttpServletRequest request,
@@ -258,8 +272,8 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // http://localhost:2019/users/user/15/role/2
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    // http://localhost:2019/users/user/15/role/2
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/user/{userid}/role/{roleid}")
     public ResponseEntity<?> deleteUserRoleByIds(HttpServletRequest request,
                                                  @PathVariable
@@ -276,8 +290,8 @@ public class UserController {
     }
 
 
-    // http://localhost:2019/users/user/15/role/2
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    // http://localhost:2019/users/user/15/role/2
+   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/user/{userid}/role/{roleid}")
     public ResponseEntity<?> postUserRoleByIds(HttpServletRequest request,
                                                @PathVariable

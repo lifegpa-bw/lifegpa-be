@@ -1,6 +1,7 @@
 package com.lambdaschool.lifegpa.controllers;
 
 import com.lambdaschool.lifegpa.logging.Loggable;
+import com.lambdaschool.lifegpa.models.Role;
 import com.lambdaschool.lifegpa.models.User;
 import com.lambdaschool.lifegpa.models.UserMinimum;
 import com.lambdaschool.lifegpa.models.UserRoles;
@@ -47,35 +48,35 @@ public class OpenController
     //     "email" : "home@local.house"
     // }
 
-    @PostMapping(value = "/createnewuser",
-                 consumes = {"application/json"},
-                 produces = {"application/json"})
-    public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest,
-                                        @RequestParam(defaultValue = "false")
-                                                boolean getaccess,
-                                        @Valid
-                                        @RequestBody
-                                                User newminuser) throws URISyntaxException
-    {
-        logger.trace(httpServletRequest.getMethod()
-                                       .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
-        System.out.println(newminuser.getUsername());
-        // Create the user
-
-
-        ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(new User(), roleService.findByName("admin")));
-        User newuser = new User(newminuser.getUsername(), newminuser.getPassword(), newminuser.getEmail(), newRoles);
-
+//    @PostMapping(value = "/createnewuser",
+//                 consumes = {"application/json"},
+//                 produces = {"application/json"})
+//    public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest,
+//                                        @RequestParam(defaultValue = "false")
+//                                                boolean getaccess,
+//                                        @Valid
+//                                        @RequestBody
+//                                                User newminuser) throws URISyntaxException
+//    {
+//        logger.trace(httpServletRequest.getMethod()
+//                                       .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
+//        System.out.println(newminuser.getUsername());
+//        // Create the user
+//
+//
+//        ArrayList<UserRoles> newRoles = new ArrayList<>();
+//        newRoles.add(new UserRoles(new User(), roleService.findByName("admin")));
+//        User newuser = new User(newminuser.getUsername(), newminuser.getPassword(), newminuser.getEmail(), newRoles);
+//
 //        newuser.setUsername(newminuser.getUsername());
 //        newuser.setPassword(newminuser.getPassword());
 //        newuser.setEmail(newminuser.getEmail());
 //        newuser.setUserroles(newRoles);
 //        System.out.println(newminuser.getPassword());
 //        newuser.getPassword();
-        newuser = userService.save(newuser);
-        System.out.println("2");
-        // set the location header for the newly created resource - to another controller!
+//        newuser = userService.save(newuser);
+//        System.out.println("2");
+//        // set the location header for the newly created resource - to another controller!
 //        HttpHeaders responseHeaders = new HttpHeaders();
 //        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
 //                                                    .buildAndExpand(newuser.getUserid())
@@ -103,7 +104,7 @@ public class OpenController
 //            headers.setAccept(acceptableMediaTypes);
 //            System.out.println("13");
 //
-//            // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
+////            // Don't forget to comment back in OAUTHCLIENTID and OAUTHCLIENTSECRET
 //            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
 //                                 System.getenv("OAUTHCLIENTSECRET"));
 ////            headers.setBasicAuth("lambda-client", "lambda-secret");
@@ -129,14 +130,68 @@ public class OpenController
 //                                                  String.class);
 //        } else
 //        {
-//            // nothing;
+////             nothing;
 //        }
-        return new ResponseEntity<>(
+//        return new ResponseEntity<>(
 //                theToken,
 //                responseHeaders,
-                HttpStatus.CREATED);
-    }
+//                HttpStatus.CREATED);
+//    }
+//
+@PostMapping(value = "/createnewuser",
+        consumes = {"application/json"},
+        produces = {"application/json"})
+public ResponseEntity<?> addNewUser(HttpServletRequest request,
+                                    @Valid
+                                    @RequestBody
+                                            User newuser) throws URISyntaxException {
+    logger.trace(request.getMethod()
+            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    Role role = roleService.findByName("admin");
+    ArrayList<UserRoles> newRoles = new ArrayList<>();
+    newRoles.add(new UserRoles(newuser,
+            role));
+    newuser.setUserroles(newRoles);
 
+    newuser = userService.save(newuser);
+
+    // set the location header for the newly created resource
+    HttpHeaders responseHeaders = new HttpHeaders();
+    URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{userid}")
+            .buildAndExpand(newuser.getUserid())
+            .toUri();
+    responseHeaders.setLocation(newUserURI);
+
+    return new ResponseEntity<>(null,
+            responseHeaders,
+            HttpStatus.CREATED);
+}
+//    @PostMapping(value = "/createnewuser",
+//            consumes = {"application/json"},
+//            produces = {"application/json"})
+//    public ResponseEntity<?> addNewUser(HttpServletRequest request, @Valid
+//    @RequestBody
+//            User newuser) throws URISyntaxException
+//    {
+//        logger.trace(request.getMethod()
+//                .toUpperCase() + " " + request.getRequestURI() + " accessed");
+//
+//        ArrayList<UserRoles> newRoles = new ArrayList<>();
+//        newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
+//        newuser.setUserroles(newRoles);
+//
+//        newuser = userService.save(newuser);
+//
+//        // set the location header for the newly created resource - to another controller!
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        URI newRestaurantURI = ServletUriComponentsBuilder.fromUriString(request.getServerName() + ":" + request.getLocalPort() + "/users/user/{userId}")
+//                .buildAndExpand(newuser.getUserid())
+//                .toUri();
+//        responseHeaders.setLocation(newRestaurantURI);
+//
+//        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+//    }
     @ApiIgnore
     @GetMapping("favicon.ico")
     void returnNoFavicon()

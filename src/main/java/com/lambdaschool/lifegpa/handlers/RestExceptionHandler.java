@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
@@ -33,20 +32,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 @Loggable
 // bean shared across controller classes
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler
 {
-
     public RestExceptionHandler()
     {
         super();
     }
-
-
     @ExceptionHandler({ResourceNotFoundException.class, EntityNotFoundException.class, UsernameNotFoundException.class})
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException rnfe,
                                                              HttpServletRequest request)
@@ -57,14 +52,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Resource Not Found");
         errorDetail.setDetail(rnfe.getMessage());
         errorDetail.setDeveloperMessage(rnfe.getClass()
-                                            .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.NOT_FOUND);
+                null,
+                HttpStatus.NOT_FOUND);
     }
-
-
     @ExceptionHandler({ResourceFoundException.class})
     public ResponseEntity<?> handleResourceFoundException(ResourceFoundException rfe,
                                                           HttpServletRequest request)
@@ -75,14 +67,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Unexpected Resource");
         errorDetail.setDetail(rfe.getMessage());
         errorDetail.setDeveloperMessage(rfe.getClass()
-                                           .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.BAD_REQUEST);
+                null,
+                HttpStatus.BAD_REQUEST);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex,
                                                         HttpHeaders headers,
@@ -95,13 +84,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle(ex.getPropertyName() + " Parameter Type Mismatch");
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(request.getDescription(true));
-
         return new ResponseEntity<>(errorDetail,
-                                    headers,
-                                    HttpStatus.NOT_FOUND);
+                headers,
+                HttpStatus.NOT_FOUND);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
                                                                    HttpHeaders headers,
@@ -114,13 +100,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle(ex.getRequestURL());
         errorDetail.setDetail(request.getDescription(true));
         errorDetail.setDeveloperMessage("Rest Handler Not Found (check for valid URI)");
-
         return new ResponseEntity<>(errorDetail,
-                                    headers,
-                                    HttpStatus.NOT_FOUND);
+                headers,
+                HttpStatus.NOT_FOUND);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
                                                                          HttpHeaders headers,
@@ -133,12 +116,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle(ex.getMethod());
         errorDetail.setDetail(request.getDescription(true));
         errorDetail.setDeveloperMessage("HTTP Method Not Valid for Endpoint (check for valid URI and proper HTTP Method)");
-
         return new ResponseEntity<>(errorDetail,
-                                    headers,
-                                    HttpStatus.NOT_FOUND);
+                headers,
+                HttpStatus.NOT_FOUND);
     }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -151,19 +132,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Validation Errors");
         errorDetail.setDetail("Input validation failed");
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         List<FieldError> fieldErrors = ex.getBindingResult()
-                                         .getFieldErrors();
+                .getFieldErrors();
         for (FieldError fe : fieldErrors)
         {
             List<ValidationError> validationErrorList = errorDetail.getErrors()
-                                                                   .get(fe.getField());
+                    .get(fe.getField());
             if (validationErrorList == null)
             {
                 validationErrorList = new ArrayList<>();
                 errorDetail.getErrors()
-                           .put(fe.getField(),
+                        .put(fe.getField(),
                                 validationErrorList);
             }
             ValidationError validationError = new ValidationError();
@@ -171,13 +151,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
             validationError.setMessage(fe.getDefaultMessage());
             validationErrorList.add(validationError);
         }
-
         return new ResponseEntity<>(errorDetail,
-                                    headers,
-                                    HttpStatus.BAD_REQUEST);
+                headers,
+                HttpStatus.BAD_REQUEST);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
@@ -190,14 +167,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Message Not Readable");
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    headers,
-                                    status);
+                headers,
+                status);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                      HttpHeaders headers,
@@ -209,21 +183,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         builder.append(ex.getContentType());
         builder.append(" media type is not supported. Supported media types are ");
         ex.getSupportedMediaTypes()
-          .forEach(t -> builder.append(t + " "));
-
+                .forEach(t -> builder.append(t + " "));
         errorDetail.setTimestamp(new Date().getTime());
         errorDetail.setStatus(status.value());
         errorDetail.setTitle("Method not supported");
         errorDetail.setDetail(builder.toString());
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.BAD_REQUEST);
+                null,
+                HttpStatus.BAD_REQUEST);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex,
                                                                HttpHeaders headers,
@@ -236,14 +206,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle(ex.getVariableName() + " Missing Path Variable");
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.BAD_REQUEST);
+                null,
+                HttpStatus.BAD_REQUEST);
     }
-
-
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
                                                              Object body,
@@ -257,14 +224,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Internal Server Error");
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.INTERNAL_SERVER_ERROR);
+                null,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<?> handleAllOtherExceptions(Exception ex,
                                                          HttpServletRequest request)
@@ -275,8 +239,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         errorDetail.setTitle("Exception");
         errorDetail.setDetail(ex.getMessage());
         errorDetail.setDeveloperMessage(ex.getClass()
-                                          .getName());
-
+                .getName());
         try
         {
             Throwable cause = ((TransactionSystemException) ex).getRootCause();
@@ -284,19 +247,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
             {
                 ArrayList<ValidationError> myErrorList = new ArrayList<>();
                 Iterator<ConstraintViolation<?>> itr = ((ConstraintViolationException) cause).getConstraintViolations()
-                                                                                             .iterator();
+                        .iterator();
                 while (itr.hasNext())
                 {
                     ConstraintViolation itrnext = itr.next();
                     ValidationError myValidationError = new ValidationError();
                     myValidationError.setCode(itrnext.getInvalidValue()
-                                                     .toString());
+                            .toString());
                     myValidationError.setMessage(itrnext.getMessage());
                     myErrorList.add(myValidationError);
                 }
-
                 errorDetail.getErrors()
-                           .put("Error",
+                        .put("Error",
                                 myErrorList);
             }
         }
@@ -304,9 +266,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         {
             // just ignore
         }
-
         return new ResponseEntity<>(errorDetail,
-                                    null,
-                                    HttpStatus.BAD_REQUEST);
+                null,
+                HttpStatus.BAD_REQUEST);
     }
 }

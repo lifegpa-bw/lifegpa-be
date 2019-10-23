@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
 
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception
