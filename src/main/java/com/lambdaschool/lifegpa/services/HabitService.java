@@ -9,13 +9,13 @@ public interface HabitService {
 
     List<Habit> findAll();
 
+    List<Habit> findAllByUser();
+
     Habit findHabitById(long id);
 
     void delete (long id);
 
     Habit save(Habit habit);
 
-    Habit findByName(String name);
-
-    Habit update(long id, Habit habit);
+    Habit update(Habit habit, long id);
 }

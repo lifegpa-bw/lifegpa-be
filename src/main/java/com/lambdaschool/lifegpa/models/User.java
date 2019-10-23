@@ -116,9 +116,9 @@ public class User extends Auditable
         }
     }
 
-    public void setEmail(String primaryemail)
+    public void setEmail(String email)
     {
-        this.email = primaryemail.toLowerCase();
+        this.email = email.toLowerCase();
     }
 
     public String getPassword()
