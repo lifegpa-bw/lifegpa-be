@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -43,8 +43,8 @@ public class Swagger2Config
                                                       .pathMapping("/")
                                                       .additionalModels(resolver.resolve(APIOpenLibrary.class),
                                                                         resolver.resolve(TokenModel.class),
-                                                                        resolver.resolve(ErrorDetail.class))
-                                                      .ignoredParameterTypes(SimpleGrantedAuthority.class);
+                                                                        resolver.resolve(ErrorDetail.class));
+//                                                      .ignoredParameterTypes(SimpleGrantedAuthority.class);
     }
 
     private ApiInfo apiEndPointsInfo()

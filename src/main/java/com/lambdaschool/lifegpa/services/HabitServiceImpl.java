@@ -3,9 +3,11 @@ package com.lambdaschool.lifegpa.services;
 import com.lambdaschool.lifegpa.exceptions.ResourceNotFoundException;
 import com.lambdaschool.lifegpa.logging.Loggable;
 import com.lambdaschool.lifegpa.models.Habit;
+import com.lambdaschool.lifegpa.models.User;
 import com.lambdaschool.lifegpa.repository.HabitRepository;
 import com.lambdaschool.lifegpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,8 +24,12 @@ public class HabitServiceImpl implements HabitService {
     UserRepository userrepos;
 
     @Override
-    public List<Habit> findAll() {
-        return null;
+    public List<Habit> findAll(Pageable pageable) {
+        List<Habit> list = new ArrayList<>();
+        habitrepos.findAll(pageable)
+                .iterator()
+                .forEachRemaining(list::add);
+        return list;
     }
 
     @Override
@@ -57,37 +63,6 @@ public class HabitServiceImpl implements HabitService {
             return habitrepos.save(newHabit);
 
     }
-
-    // User newUser = new User();
-    //        newUser.setUsername(user.getUsername().toLowerCase());
-    //        newUser.setPasswordNoEncrypt(user.getPassword());
-    //        newUser.setEmail(user.getEmail().toLowerCase());
-    //
-    //        ArrayList<UserRoles> newRoles = new ArrayList<>();
-    //        for (UserRoles ur : user.getUserroles())
-    //        {
-    //            long id = ur.getRole()
-    //                        .getRoleid();
-    //            Role role = rolerepos.findById(id)
-    //                                 .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
-    //            newRoles.add(new UserRoles(newUser,
-    //                                       ur.getRole()));
-    //        }
-    //        newUser.setUserroles(newRoles);
-    //
-    //        for (Useremail ue : user.getUseremails())
-    //        {
-    //            newUser.getUseremails()
-    //                   .add(new Useremail(newUser,
-    //                                      ue.getUseremail()));
-    //        }
-    //
-    //        return userrepos.save(newUser);
-
-//    @Override
-//    public List<Habit> findByNameContaining(String name) {
-//        return habitrepos.findByNameContainingIgnoreCase(name.toLowerCase());
-//    }
 
     @Override
     public Habit update(Habit habit, long id) {

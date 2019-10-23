@@ -24,9 +24,7 @@ import java.util.List;
 
 @Loggable
 @Service(value = "userService")
-public class UserServiceImpl implements UserDetailsService,
-        UserService
-{
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userrepos;
@@ -36,16 +34,16 @@ public class UserServiceImpl implements UserDetailsService,
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException
     {
         User user = userrepos.findByUsername(username.toLowerCase());
         if (user == null)
         {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername().toLowerCase(),
-                                                                      user.getPassword(),
-                                                                      user.getAuthority());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
+
     }
 
     public User findUserById(long id) throws ResourceNotFoundException

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class UseremailController
     UseremailService useremailService;
 
     // http://localhost:2019/useremails/useremails
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/useremails",
                 produces = {"application/json"})
     public ResponseEntity<?> listAllUseremails(HttpServletRequest request)
@@ -39,7 +39,7 @@ public class UseremailController
     }
 
     // http://localhost:2019/useremails/useremail/8
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/useremail/{useremailId}",
                 produces = {"application/json"})
     public ResponseEntity<?> getUserEmailById(HttpServletRequest request,
