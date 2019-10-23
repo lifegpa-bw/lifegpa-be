@@ -52,7 +52,7 @@ public class HabitController {
 
     // GET request - localhost:2019/habits/habits
     @GetMapping(value = "/habits", produces = {"application/json"})
-    public ResponseEntity<?> listAllHabitByUserId(HttpServletRequest request, @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public ResponseEntity<?> listAllHabitByUser(HttpServletRequest request, @PageableDefault(page = 0, size = 5) Pageable pageable) {
         logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Habit> myHabits = habitService.findAll(pageable);
