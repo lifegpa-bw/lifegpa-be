@@ -52,7 +52,7 @@ public class HabitController {
 
     // GET request - localhost:2019/habits/habits
     @GetMapping(value = "/habits", produces = {"application/json"})
-    public ResponseEntity<?> listAllHabitByUserId(HttpServletRequest request, @PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public ResponseEntity<?> listAllHabitByUser(HttpServletRequest request, @PageableDefault(page = 0, size = 5) Pageable pageable) {
         logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Habit> myHabits = habitService.findAll(pageable);
@@ -85,4 +85,27 @@ public class HabitController {
                 HttpStatus.CREATED);
     }
 
+    // PUT - updating a habit
+    @PutMapping(value = "/habit/{id}")
+    public ResponseEntity<?> updateHabit(HttpServletRequest request,
+                                        @RequestBody
+                                                Habit updateHabit,
+                                        @PathVariable
+                                                long id) {
+        logger.trace(request.getMethod()
+                .toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+        habitService.update(updateHabit, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // DELETE - delete a habit
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<?> deleteHabitById(HttpServletRequest request,
+                                            @PathVariable long id) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
+
+        habitService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

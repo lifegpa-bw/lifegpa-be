@@ -3,7 +3,6 @@ package com.lambdaschool.lifegpa.services;
 import com.lambdaschool.lifegpa.exceptions.ResourceNotFoundException;
 import com.lambdaschool.lifegpa.logging.Loggable;
 import com.lambdaschool.lifegpa.models.Habit;
-import com.lambdaschool.lifegpa.models.User;
 import com.lambdaschool.lifegpa.repository.HabitRepository;
 import com.lambdaschool.lifegpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
