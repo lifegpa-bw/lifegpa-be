@@ -97,7 +97,7 @@ public class UserController {
         return new ResponseEntity<>(u,
                 HttpStatus.OK);
     }
-//
+
     // http://localhost:2019/users/user/name/cinnamon
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/{userName}",

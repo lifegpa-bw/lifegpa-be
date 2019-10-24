@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Loggable
-@Service(value = "dailytrackerService")
+@Service(value = "dailyTrackerService")
 public class DailyTrackerServiceImpl implements DailyTrackerService {
 
     @Autowired
@@ -30,7 +30,7 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
     UserRepository userrepos;
 
     // Find all Daily Tracker
-    @Override
+//    @Override
     public List<DailyTracker> findAll(Pageable pageable) {
         List<DailyTracker> list = new ArrayList<>();
         dailytrackerrepos.findAll(pageable)
@@ -40,7 +40,7 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
     }
 
     // find Daily Tracker by id
-    @Override
+//    @Override
     public List<DailyTracker> findDailyTrackerById() {
         List<DailyTracker> dailytrackers = new ArrayList<>();
         dailytrackerrepos.findAll().iterator().forEachRemaining(dailytrackers::add);
@@ -53,6 +53,16 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
 //                .orElseThrow(() -> new ResourceNotFoundException("Habit id " + id + " not found!"));
 //    }
 
+    @Override
+    public List<DailyTracker> findAll(java.awt.print.Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public DailyTracker findDailyTrackerById(long id) {
+        return null;
+    }
+
     // delete
     @Override
     public void delete(long id) {
@@ -64,14 +74,7 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
     // save
     @Override
     public DailyTracker save(DailyTracker dailyTracker) {
-        DailyTracker newDailyTracker = new DailyTracker();
-        newDailyTracker.setDailytrackerid(dailyTracker.getDailytrackerid());
-        newDailyTracker.setDatetime(dailyTracker.getDatetime());
-        newDailyTracker.setUser(dailyTracker.getUser());
-        newDailyTracker.setHabit(dailyTracker.getHabit());
-
-        return dailytrackerrepos.save(newDailyTracker);
-
+        return dailytrackerrepos.save(dailyTracker);
     }
 
     // update

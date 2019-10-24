@@ -3,10 +3,7 @@ package com.lambdaschool.lifegpa.services;
 import com.lambdaschool.lifegpa.exceptions.ResourceFoundException;
 import com.lambdaschool.lifegpa.exceptions.ResourceNotFoundException;
 import com.lambdaschool.lifegpa.logging.Loggable;
-import com.lambdaschool.lifegpa.models.Role;
-import com.lambdaschool.lifegpa.models.User;
-import com.lambdaschool.lifegpa.models.UserRoles;
-import com.lambdaschool.lifegpa.models.Useremail;
+import com.lambdaschool.lifegpa.models.*;
 import com.lambdaschool.lifegpa.repository.RoleRepository;
 import com.lambdaschool.lifegpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +91,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User save(User user)
     {
+        User userp = userrepos.findByUsername(user.getUsername());
         if (userrepos.findByUsername(user.getUsername().toLowerCase()) != null)
         {
             throw new ResourceFoundException(user.getUsername() + " is already taken!");
@@ -172,6 +170,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                                                   ue.getUseremail()));
                 }
             }
+
+            if(user.getHabits().size() > 0 ){
+                for(Habit habit : user.getHabits()){
+
+                    currentUser.getHabits()
+                            .add(new Habit(habit.getDescription(),
+                                    habit.getScore(),habit.isGood_boolean(),user));
+                }
+            }
+
+            //save habits to habits table
 
             return userrepos.save(currentUser);
         } else
