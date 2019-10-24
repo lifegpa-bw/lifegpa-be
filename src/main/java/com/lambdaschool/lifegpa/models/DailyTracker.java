@@ -13,10 +13,19 @@ public class DailyTracker extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long dailytrackerid;
+    private long id;
 
     @Column(nullable = false)
     private LocalDateTime datetime = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private String timeSpent;
+
+    @Column(nullable = false)
+    private String userIden;
+
+    @Column(nullable = false)
+    private String habbitId;
 
 
     @ManyToOne
@@ -33,18 +42,47 @@ public class DailyTracker extends Auditable {
     public DailyTracker() {
     }
 
-    public DailyTracker(LocalDateTime datetime, User user, Habit habit) {
+
+    public String getUserIden() {
+        return userIden;
+    }
+
+    public void setUserIden(String userIden) {
+        this.userIden = userIden;
+    }
+
+    public DailyTracker(LocalDateTime datetime, String timeSpent, String userIden, String habbitId, User user, Habit habit) {
         this.datetime = datetime;
+        this.timeSpent = timeSpent;
+        this.userIden = userIden;
+        this.habbitId = habbitId;
         this.user = user;
         this.habit = habit;
     }
 
-    public long getDailytrackerid() {
-        return dailytrackerid;
+    public String getHabbitId() {
+        return habbitId;
     }
 
-    public void setDailytrackerid(long dailytrackerid) {
-        this.dailytrackerid = dailytrackerid;
+    public void setHabbitId(String habbitId) {
+        this.habbitId = habbitId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+    public String getTimeSpent() {
+        return timeSpent;
+    }
+
+    public void setTimeSpent(String timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
     public LocalDateTime getDatetime() {

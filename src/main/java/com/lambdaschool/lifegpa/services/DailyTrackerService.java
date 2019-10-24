@@ -18,6 +18,4 @@ public interface DailyTrackerService {
 
     DailyTracker update(DailyTracker dailyTracker, long id);
 
-
-
 }

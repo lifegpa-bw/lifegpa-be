@@ -53,31 +53,60 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<DailyTracker> dailytrackers = new ArrayList<>();
 
+    public List<DailyTracker> getDailytrackers() {
+        return dailytrackers;
+    }
+
+    public void setDailytrackers(List<DailyTracker> dailytrackers) {
+        this.dailytrackers = dailytrackers;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
     @OneToMany(mappedBy = "user",
                 cascade = CascadeType.ALL,
                 orphanRemoval = true)
     @JsonIgnoreProperties("user")
     private List<Habit> habits = new ArrayList<>();
 
+    public User(String username, String password, @Email String email, List<UserRoles> userroles, List<Useremail> useremails, List<DailyTracker> dailytrackers, List<Habit> habits) {
+        setUsername(username);
+        setPassword(password);
+        this.email = email;
+        for (UserRoles ur : userroles)
+        {
+            ur.setUser(this);
+        }
+        this.userroles = userroles;
+        this.useremails = useremails;
+        this.dailytrackers = dailytrackers;
+        this.habits = habits;
+    }
 
     public User()
     {
     }
 
-    public User(String username,
-                String password,
-                String email,
-                List<UserRoles> userRoles)
-    {
-        setUsername(username);
-        setPassword(password);
-        this.email = email;
-        for (UserRoles ur : userRoles)
-        {
-            ur.setUser(this);
-        }
-        this.userroles = userRoles;
-    }
+//    public User(String username,
+//                String password,
+//                String email,
+//                List<UserRoles> userRoles)
+//    {
+//        setUsername(username);
+//        setPassword(password);
+//        this.email = email;
+//        for (UserRoles ur : userRoles)
+//        {
+//            ur.setUser(this);
+//        }
+//        this.userroles = userRoles;
+//    }
 
     public long getUserid()
     {
@@ -173,9 +202,9 @@ public class User extends Auditable
         return rtnList;
     }
 
-    @Override
-    public String toString()
-    {
-        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", userroles=" + userroles + ", useremails=" + useremails + '}';
-    }
+//    @Override
+//    public String toString()
+//    {
+//        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", userroles=" + userroles + ", useremails=" + useremails + '}';
+//    }
 }
