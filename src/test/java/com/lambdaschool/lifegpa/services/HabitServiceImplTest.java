@@ -1,6 +1,7 @@
 package com.lambdaschool.lifegpa.services;
 
 import com.lambdaschool.lifegpa.LifegpaApplication;
+import com.lambdaschool.lifegpa.models.Habit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -50,11 +51,12 @@ public class HabitServiceImplTest {
 
     @Test
     public void findHabitById() {
-//        assertEquals("Going to bed early", habitService.findHabitById());
+        assertEquals("Going to bed early", habitService.findHabitById(21).getDescription());
     }
 
     @Test
     public void delete() {
+        habitService.delete(21);
     }
 
     @Test
@@ -63,5 +65,7 @@ public class HabitServiceImplTest {
 
     @Test
     public void update() {
+        Habit h1 = new Habit("Start working out", 80, true, userService.findUserById(14));
+
     }
 }
