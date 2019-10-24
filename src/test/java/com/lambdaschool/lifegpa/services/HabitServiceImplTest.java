@@ -50,7 +50,7 @@ public class HabitServiceImplTest {
 
     @Test
     public void findHabitById() {
-//        assertEquals("Going to bed early", habitService.findHabitById());
+        assertEquals("Going to bed early", habitService.findHabitById(14));
     }
 
     @Test
