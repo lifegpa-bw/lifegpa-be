@@ -3,11 +3,15 @@ package com.lambdaschool.lifegpa.services;
 import com.lambdaschool.lifegpa.exceptions.ResourceNotFoundException;
 import com.lambdaschool.lifegpa.logging.Loggable;
 import com.lambdaschool.lifegpa.models.Habit;
+import com.lambdaschool.lifegpa.models.User;
 import com.lambdaschool.lifegpa.repository.HabitRepository;
 import com.lambdaschool.lifegpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +55,22 @@ public class HabitServiceImpl implements HabitService {
         habitrepos.deleteById(id);
     }
 
+    @Transactional
     @Override
     public Habit save(Habit habit) {
+        System.out.println("hello");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+        System.out.println(currentUser.getUsername() + "*****Print here****");
         Habit newHabit = new Habit();
-            newHabit.setDescription(habit.getDescription());
-            newHabit.setScore(habit.getScore());
-            newHabit.setGood_boolean(habit.isGood_boolean());
-            newHabit.setUser(habit.getUser());
-
-            return habitrepos.save(newHabit);
+        newHabit.setDescription(habit.getDescription());
+        newHabit.setScore(habit.getScore());
+        newHabit.setGood_boolean(habit.isGood_boolean());
+        newHabit.setUser(currentUser);
+        List<Habit> userHabit = currentUser.getHabits();
+        userHabit.add(newHabit);
+        currentUser.setHabits(userHabit);
+        return habitrepos.save(newHabit);
 
     }
 

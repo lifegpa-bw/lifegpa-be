@@ -3,10 +3,8 @@ package com.lambdaschool.lifegpa;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
-import com.lambdaschool.lifegpa.models.Role;
-import com.lambdaschool.lifegpa.models.User;
-import com.lambdaschool.lifegpa.models.UserRoles;
-import com.lambdaschool.lifegpa.models.Useremail;
+import com.lambdaschool.lifegpa.models.*;
+import com.lambdaschool.lifegpa.services.HabitService;
 import com.lambdaschool.lifegpa.services.RoleService;
 import com.lambdaschool.lifegpa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Transactional
@@ -26,6 +25,9 @@ public class SeedData implements CommandLineRunner
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    HabitService habitService;
 
 
     @Override
@@ -79,7 +81,7 @@ public class SeedData implements CommandLineRunner
         u2.getUseremails()
           .add(new Useremail(u2,
                              "bunny@email.local"));
-//        userService.save(u2);
+        userService.save(u2);
 
         // user
         ArrayList<UserRoles> users = new ArrayList<>();
@@ -92,7 +94,7 @@ public class SeedData implements CommandLineRunner
         u3.getUseremails()
           .add(new Useremail(u3,
                              "barnbarn@email.local"));
-//        userService.save(u3);
+        userService.save(u3);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(),
@@ -101,7 +103,7 @@ public class SeedData implements CommandLineRunner
                            "password",
                            "puttat@school.lambda",
                            users, new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
-//        userService.save(u4);
+        userService.save(u4);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(),
@@ -110,7 +112,7 @@ public class SeedData implements CommandLineRunner
                            "password",
                            "misskitty@school.lambda",
                            users, new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
-//        userService.save(u5);
+        u5 = userService.save(u5);
 
         // using JavaFaker create a bunch of regular users
         // https://www.baeldung.com/java-faker
@@ -137,7 +139,32 @@ public class SeedData implements CommandLineRunner
             fakeUser.getUseremails()
                     .add(new Useremail(fakeUser,
                                        fakeValuesService.bothify("????##@gmail.com")));
-//            userService.save(fakeUser);
+            userService.save(fakeUser);
         }
+
+        // habit
+//        List<DailyTracker> dailytrackers = new ArrayList<>();
+
+        u5.getHabits().add(new Habit("Going to bed early", 80, false, u5));
+//        habitService.save(h1);
+
+        // dailytracker
+//        DailyTracker d1 = new DailyTracker("")
     }
+
+// public DailyTracker(LocalDateTime datetime, String timeSpent, String userIden, String habbitId, User user, Habit habit) {
+//        this.datetime = datetime;
+//        this.timeSpent = timeSpent;
+//        this.userIden = userIden;
+//        this.habbitId = habbitId;
+//        this.user = user;
+//        this.habit = habit;
+//    }
+
+//    public Habit(String description, int score, boolean good_boolean, User user) {
+//        this.description = description;
+//        this.score = score;
+//        this.good_boolean = good_boolean;
+//        this.user = user;
+//    }
 }
