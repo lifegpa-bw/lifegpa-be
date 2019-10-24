@@ -30,7 +30,7 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
     UserRepository userrepos;
 
     // Find all Daily Tracker
-//    @Override
+    @Override
     public List<DailyTracker> findAll(Pageable pageable) {
         List<DailyTracker> list = new ArrayList<>();
         dailytrackerrepos.findAll(pageable)
@@ -53,8 +53,9 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
 //                .orElseThrow(() -> new ResourceNotFoundException("Habit id " + id + " not found!"));
 //    }
 
+
     @Override
-    public List<DailyTracker> findAll(java.awt.print.Pageable pageable) {
+    public List<DailyTracker> findAll() {
         return null;
     }
 
